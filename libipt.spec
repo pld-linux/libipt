@@ -12,7 +12,7 @@ Source0:	https://github.com/01org/processor-trace/archive/v%{version}.tar.gz
 BuildRequires:	cmake
 BuildRequires:	libstdc++-devel
 BuildRequires:	pandoc
-ExclusiveArch:	%{ix86} x86_64
+ExclusiveArch:	%{ix86} %{x8664}
 
 %description
 The Intel Processor Trace (Intel PT) Decoder Library is Intel's
@@ -23,7 +23,7 @@ your tool.
 %package devel
 Summary:	Header files and libraries for Intel Processor Trace Decoder Library
 Requires:	%{name} = %{version}-%{release}
-ExclusiveArch:	%{ix86} x86_64
+ExclusiveArch:	%{ix86} %{x8664}
 
 %description devel
 The %{name}-devel package contains the header files and libraries
