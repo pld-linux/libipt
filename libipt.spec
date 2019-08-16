@@ -22,6 +22,7 @@ your tool.
 
 %package devel
 Summary:	Header files and libraries for Intel Processor Trace Decoder Library
+Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664}
 
