@@ -2,7 +2,12 @@
 # Conditional build:
 %bcond_without	xed	# ptxed utility
 %bcond_without	tests	# unit tests
+%bcond_without	ghc	# man pages (requires ghc-dependent pandoc)
 
+# even though we can install i686 or x86_64 pandoc on x32, it fails with "out of memory"
+%ifnarch %{ix86} %{x8664}
+%undefine	with_ghc
+%endif
 Summary:	Intel Processor Trace Decoder Library
 Summary(pl.UTF-8):	Biblioteka dekodera Intel PT (śladów procesora Intel)
 Name:		libipt
@@ -18,8 +23,7 @@ BuildRequires:	cmake >= 2.8.6
 %{?with_xed:BuildRequires:	intel-xed-devel}
 # C++ is required only for -DPTUNIT test "ptunit-cpp".
 %{?with_tests:BuildRequires:	libstdc++-devel}
-# pandoc for -DMAN
-BuildRequires:	pandoc
+%{?with_ghc:BuildRequires:	pandoc}
 ExclusiveArch:	%{ix86} %{x8664} x32
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -70,7 +74,7 @@ cd build
 %cmake .. \
 	-DDEVBUILD:BOOL=ON \
 	-DFEATURE_ELF:BOOL=ON \
-	-DMAN:BOOL=ON \
+	%{?with_ghc:-DMAN:BOOL=ON} \
 	-DPEVENT:BOOL=ON \
 	-DPTDUMP:BOOL=ON \
 	%{?with_tests:-DPTUNIT:BOOL=ON} \
@@ -108,7 +112,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc doc/{getting_started,howto_capture,howto_libipt}.md
 %attr(755,root,root) %{_libdir}/libipt.so
 %{_includedir}/intel-pt.h
+%if %{with ghc}
 %{_mandir}/man3/pt_*.3*
+%endif
 
 %files tools
 %defattr(644,root,root,755)
