@@ -4,10 +4,6 @@
 %bcond_without	tests	# unit tests
 %bcond_without	ghc	# man pages (requires ghc-dependent pandoc)
 
-# even though we can install i686 or x86_64 pandoc on x32, it fails with "out of memory"
-%ifnarch %{ix86} %{x8664}
-%undefine	with_ghc
-%endif
 Summary:	Intel Processor Trace Decoder Library
 Summary(pl.UTF-8):	Biblioteka dekodera Intel PT (śladów procesora Intel)
 Name:		libipt
