@@ -7,13 +7,13 @@
 Summary:	Intel Processor Trace Decoder Library
 Summary(pl.UTF-8):	Biblioteka dekodera Intel PT (śladów procesora Intel)
 Name:		libipt
-Version:	2.0.1
-Release:	2
+Version:	2.0.4
+Release:	1
 License:	BSD
 Group:		Libraries
-#Source0Download: https://github.com/intel/libipt/releases
+#Source0Download: https://github.com/intel/libipt/tags
 Source0:	https://github.com/intel/libipt/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	bae11676b72d341ecb9b33b9add84be8
+# Source0-md5:	cf2c97292dc61ea898dd84b460921f79
 URL:		https://github.com/intel/libipt
 BuildRequires:	cmake >= 2.8.6
 %{?with_xed:BuildRequires:	intel-xed-devel}
