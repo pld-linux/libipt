@@ -1,0 +1,21 @@
+Avoid build failure with -Werror=maybe-uninitialized
+--- libipt-2.0.1/libipt/test/src/ptunit-msec_cache.c.orig	2019-08-13 10:39:44.000000000 +0200
++++ libipt-2.0.1/libipt/test/src/ptunit-msec_cache.c	2021-11-17 19:14:27.713062249 +0100
+@@ -296,7 +296,7 @@ static struct ptunit_result read(struct
+ static struct ptunit_result fill_nomap(struct test_fixture *tfix)
+ {
+ 	const struct pt_mapped_section *msec;
+-	struct pt_asid asid;
++	struct pt_asid asid = {0, };
+ 	struct pt_section *section;
+ 	int status;
+ 
+@@ -320,7 +320,7 @@ static struct ptunit_result fill(struct
+ {
+ 	const struct pt_mapped_section *msec;
+ 	struct pt_section *section;
+-	struct pt_asid asid;
++	struct pt_asid asid = {0, };
+ 	int status;
+ 
+ 	status = pt_msec_cache_fill(&tfix->mcache, &msec, &tfix->image, &asid,
