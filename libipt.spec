@@ -7,16 +7,17 @@
 Summary:	Intel Processor Trace Decoder Library
 Summary(pl.UTF-8):	Biblioteka dekodera Intel PT (śladów procesora Intel)
 Name:		libipt
-Version:	2.0.4
-Release:	2
+Version:	2.1
+Release:	1
 License:	BSD
 Group:		Libraries
 #Source0Download: https://github.com/intel/libipt/tags
 Source0:	https://github.com/intel/libipt/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	cf2c97292dc61ea898dd84b460921f79
+# Source0-md5:	064e0d369bd30f78ec771a10c88a71ef
 Patch0:		%{name}-uninitialized.patch
+Patch1:		%{name}-intel-xed.patch
 URL:		https://github.com/intel/libipt
-BuildRequires:	cmake >= 2.8.6
+BuildRequires:	cmake >= 3.1
 %{?with_xed:BuildRequires:	intel-xed-devel}
 # C++ is required only for -DPTUNIT test "ptunit-cpp".
 %{?with_tests:BuildRequires:	libstdc++-devel}
@@ -65,6 +66,7 @@ Narzędzia Intel PT.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 install -d build
@@ -76,8 +78,8 @@ cd build
 	-DPEVENT:BOOL=ON \
 	-DPTDUMP:BOOL=ON \
 	%{?with_tests:-DPTUNIT:BOOL=ON} \
-	%{?with_xed:-DPTXED:BOOL=ON -DXED_INCLUDE=%{_includedir}/xed}
-# -DSIDEBAND:BOOL=ON not yet: not installed, binaries depend on it
+	%{?with_xed:-DPTXED:BOOL=ON -DXED_INCLUDE=%{_includedir}/xed} \
+	-DSIDEBAND:BOOL=ON
 
 %{__make}
 
@@ -86,6 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+# not installed by cmake
+cp -a build/lib/libipt-sb.so* $RPM_BUILD_ROOT%{_libdir}
 
 install -d $RPM_BUILD_ROOT%{_bindir}
 install build/bin/ptdump $RPM_BUILD_ROOT%{_bindir}
@@ -104,11 +109,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc LICENSE README
 %attr(755,root,root) %{_libdir}/libipt.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libipt.so.2
+%attr(755,root,root) %{_libdir}/libipt-sb.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libipt-sb.so.2
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/{getting_started,howto_capture,howto_libipt}.md
 %attr(755,root,root) %{_libdir}/libipt.so
+%attr(755,root,root) %{_libdir}/libipt-sb.so
 %{_includedir}/intel-pt.h
 %if %{with ghc}
 %{_mandir}/man3/pt_*.3*

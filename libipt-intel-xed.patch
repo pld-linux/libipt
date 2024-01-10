@@ -1,0 +1,13 @@
+Adjust for intel-xed 2023.12.19, which replaces SYSCALL_AMD iclass with SYSCALL_32 by "fred" instruction set
+--- libipt-2.1/ptxed/src/ptxed.c.orig	2023-10-12 09:39:11.000000000 +0200
++++ libipt-2.1/ptxed/src/ptxed.c	2024-01-10 20:19:27.212066096 +0100
+@@ -48,6 +48,9 @@
+ 
+ #include <xed-interface.h>
+ 
++#if !defined(XED_ICLASS_SYSCALL_AMD_DEFINED) && defined(XED_ICLASS_SYSCALL_32_DEFINED)
++#  define XED_ICLASS_SYSCALL_AMD XED_ICLASS_SYSCALL_32
++#endif
+ 
+ /* The type of decoder to be used. */
+ enum ptxed_decoder_type {
